@@ -1,46 +1,69 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Custom Switch Toggle UI Script
+/// developed using Unity 2021 LTS
+/// yusuf.buyruk@ghd.com
+/// </summary>
 public class SwitchToggle : MonoBehaviour
 {
-    [SerializeField] RectTransform uiHandleRectTransform;
-    [SerializeField] Color backgroundActiveColor;
-    [SerializeField] Color handleActiveColor;
+    // Toggle Button components
+    // sprite, colors
+    [SerializeField] public RectTransform uiHandleRectTransform;
+    [SerializeField] public Color backgroundActiveColor;
+    [SerializeField] public Color handleActiveColor;
 
-    Image backgroundImage, handleImage;
-    Color backgroundDefaultColor, handleDefaultColor;
-    Toggle toggle;
-    Vector2 handlePosition;
+    // Toggle Button components
+    private Image _backgroundImage, _handleImage;
+    private Color _backgroundDefaultColor, _handleDefaultColor;
+    private Toggle _toggle;
+    private Vector2 _handlePosition;
 
     void Awake()
     {
-        toggle = GetComponent<Toggle>();
+        // Built-in Toggle component
+        _toggle = GetComponent<Toggle>();
 
-        handlePosition = uiHandleRectTransform.anchoredPosition;
+        // Handle Position
+        _handlePosition = uiHandleRectTransform.anchoredPosition;
 
-        backgroundImage = uiHandleRectTransform.parent.GetComponent<Image>();
-        handleImage = uiHandleRectTransform.GetComponent<Image>();
+        // Background Image
+        _backgroundImage = uiHandleRectTransform.parent.GetComponent<Image>();
+        
+        // Handle Image
+        _handleImage = uiHandleRectTransform.GetComponent<Image>();
 
-        backgroundDefaultColor = backgroundImage.color;
-        handleDefaultColor = handleImage.color;
+        // Background Default Color
+        _backgroundDefaultColor = _backgroundImage.color;
 
-        toggle.onValueChanged.AddListener(OnSwitch);
+        // Handle Default Color
+        _handleDefaultColor = _handleImage.color;
 
-        OnSwitch(toggle.isOn);
+        // Add Listener Event += OnSwitch
+        _toggle.onValueChanged.AddListener(OnSwitch);
+
+        // Initial Value
+        OnSwitch(_toggle.isOn);
     }
 
     void OnDestroy()
     {
-        toggle.onValueChanged.RemoveListener(OnSwitch);
+        // Remove Listener Event -= OnSwitch
+        _toggle.onValueChanged.RemoveListener(OnSwitch);
     }
 
+    // OnValueChanged
     void OnSwitch(bool on)
     {
-        uiHandleRectTransform.anchoredPosition = on ? handlePosition * -1 : handlePosition;
+        // Handle Image Position
+        uiHandleRectTransform.anchoredPosition = on ? _handlePosition * -1 : _handlePosition;
 
-        backgroundImage.color = on ? backgroundActiveColor : backgroundDefaultColor;
+        // Background Image Color
+        _backgroundImage.color = on ? backgroundActiveColor : _backgroundDefaultColor;
 
-        handleImage.color = on ? handleActiveColor : handleDefaultColor;
+        // Handle Image Color
+        _handleImage.color = on ? handleActiveColor : _handleDefaultColor;
     }
 
 }
